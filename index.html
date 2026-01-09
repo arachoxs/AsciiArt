@@ -18,20 +18,32 @@
         <div class="bg-green-950/10 md:w-7/10 min-h-screen md:min-h-auto md:mx-5 mx-4 my-3 p-3 max-w-full">
             <p id="ascii-container" class="h-full w-full text-center font-mono"></p>
         </div>
-        <div class="relative flex-1 flex max-h-screen items-center justify-center text-green-900 min-h-100 bg-green-950/10 mx-4 my-3 md:mr-5 md:my-3
+        <div class="relative flex-1 flex flex-col max-h-screen text-green-900 min-h-100 bg-green-950/10 mx-4 my-3 md:mr-5 md:my-3
             text-[10px]
             leading-2.5
             tracking-[0.5px]
             whitespace-pre
         ">
-            <header class="bg-green-950/30 top-0 flex flex-col py-1 self-start w-full h-fit">
+            <header class="bg-green-950/30 flex flex-col py-1 w-full h-fit">
                 <h1 class="text-3xl text-center w-full">ASCII Camera</h1>
                 <p class="w-full text-xl text-center">Arachoxs</p>
             </header>
+
+            <section>
+                <div class="flex justify-around w-full flex-wrap mt-0 px-2 gap-4">
+                    <button id="camera-trigger" class="flex-1 h-20 justify-center items-center border-4 cursor-pointer border-green-950/30">
+                        <p class="text-lg">Use Camera</p>
+                    </button>
+
+                    <button id="media-trigger" class="flex-1 h-20 justify-center items-center border-4 cursor-pointer border-green-950/30">
+                        <p class="text-lg">Use Image</p>
+                    </button>
+                </div>
+            </section>
             
         </div>
     </main>
 
-    <script src="script.js"></script>
+    <script type="module" src="./script.js"></script>
 </body>
 </html>
