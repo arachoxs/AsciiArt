@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ascii Style</title>
+    <link href="./output.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
+<body class="bg-black text-white">
+    <video id="video-container" style="display:none;" autoplay></video>
+    <canvas id="canvas-container" style="display: none;"></canvas>
+
+    <main class="flex bg-green-950/30 min-h-screen md:flex-row flex-col-reverse m-0 w-full">
+        <p id="ascii-container" class="bg-green-950/10 overflow-hidden md:w-7/10 min-h-screen md:min-h-auto w-full text-center font-mono md:mx-5 my-3"></p>
+        <div class="relative flex-1 flex max-h-screen items-center justify-center text-green-900 min-h-100 bg-green-950/10 mx-0 md:mr-5 md:my-3
+            text-[10px]
+            leading-2.5
+            tracking-[0.5px]
+            whitespace-pre
+        ">
+            <header class="bg-green-950/30 top-0 flex flex-col py-1 self-start w-full h-fit">
+                <h1 class="text-3xl text-center w-full">ASCII Camera</h1>
+                <p class="w-full text-xl text-center">Arachoxs</p>
+            </header>
+            
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+main{
+    font-family: 'VT323', monospace;
+    box-sizing: border-box;
+}
+
+main *{
+    box-sizing: border-box;
+}
