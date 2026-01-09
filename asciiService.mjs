@@ -25,6 +25,15 @@ console.log(characterWidth, characterHeight);
 
 const videoElement = document.getElementById("video-container");
 const chars = ".'`^\",:;Il!i><~+_-?][}{1)(|\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
+const asciiContainer = document.getElementById("ascii-container");
+let intervalId;
+
+export function cleanBoard(){
+    clearInterval(intervalId);
+    asciiContainer.innerHTML="";
+    asciiContainer.textContent="";
+    console.log("board Cleaned");
+}
 
 //we have to send the video to a canvas
 export function asciiGenerator(stream) {
@@ -35,8 +44,6 @@ export function asciiGenerator(stream) {
     //se necesita enviar el video a un canva para leer cada pixel del frame
     const canvas = document.getElementById("canvas-container");
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
-
-    const asciiContainer = document.getElementById("ascii-container");
 
     //se obtiene la configuración de w,h del video
     const track = stream.getVideoTracks()[0];
@@ -57,13 +64,15 @@ export function asciiGenerator(stream) {
     */
     
     //como es un texto necesitamos actualizar continuamente nuestro contenedor
-    setInterval(() => {
+    intervalId = setInterval(() => {
         ctx.drawImage(videoElement, 0, 0, width, height);
         const data = ctx.getImageData(0, 0, width, height).data;
 
         // tamaño del contenedor ASCII (CSS px)
         const asciiW = asciiContainer.getBoundingClientRect().width;
         const asciiH = asciiContainer.getBoundingClientRect().height;
+
+        console.log(asciiW,asciiH);
 
         // cantidad de caracteres que caben
         const cols = Math.floor(asciiW / characterWidth);
