@@ -1,4 +1,4 @@
-import { asciiGenerator , cleanBoard } from "./asciiService.mjs";
+import { asciiGenerator , cleanBoard , changeStyle} from "./asciiService.mjs";
 
 const MEDIAW = 1280;
 const MEDIAH = 720;
@@ -20,8 +20,21 @@ cameraButton.addEventListener("click",()=>{
     }
 });
 
+//se obtiene la informacion del formualrio
+
+const styleForm = document.getElementById("style-form");
+
+styleForm.addEventListener("submit",(e)=>{
+    e.preventDefault();
+
+    var formData = new FormData(styleForm);
+    changeStyle(Object.fromEntries(formData))
+})
+
+
 function cameraDesactivate(){
     let videoTrack = mediaObj.getVideoTracks()[0];
+    videoTrack.stop();
     mediaObj.removeTrack(videoTrack);
     console.log(mediaObj);
 }

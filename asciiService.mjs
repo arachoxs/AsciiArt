@@ -1,38 +1,65 @@
-let letterSpacing=3;
-let lineHeight=10;
-let fontSize=10;
-
-//vamos a calcular el ancho de nuestros caracteres desde la carga incial
-
-const characterDiv = document.createElement("span");
-characterDiv.textContent="A";
-characterDiv.style.cssText = `
-    position: absolute;
-    visibility: hidden;
-    font-family: monospace;
-    font-size: ${fontSize}px;
-    letter-spacing: ${letterSpacing}px;
-    line-height: ${lineHeight}px;
-`;
-
-document.body.appendChild(characterDiv);
-
-let { width: characterWidth, height:characterHeight } = characterDiv.getBoundingClientRect();
-
-document.body.removeChild(characterDiv);
-
-console.log(characterWidth, characterHeight);
-
 const videoElement = document.getElementById("video-container");
 const chars = ".'`^\",:;Il!i><~+_-?][}{1)(|\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
 const asciiContainer = document.getElementById("ascii-container");
+
+let config = {
+    letterSpacing:4,
+    lineHeight:7,
+    fontSize:10
+}
+
+//se calcula desde un inicio el tamaño de los caracteres 
+let characterSize = calcSize();
+
 let intervalId;
+
+function calcSize(){
+    const characterDiv = document.createElement("span");
+    characterDiv.textContent="A";
+    characterDiv.style.cssText = `
+        position: absolute;
+        visibility: hidden;
+        font-family: monospace;
+        font-size: ${config.fontSize}px;
+        letter-spacing: ${config.letterSpacing}px;
+        line-height: ${config.lineHeight}px;
+    `;
+
+    document.body.appendChild(characterDiv);
+
+    let { width, height } = characterDiv.getBoundingClientRect();
+    document.body.removeChild(characterDiv);
+
+    asciiContainer.style = `font-size:${config.fontSize}px; text:black; line-height:${config.lineHeight}px; letter-spacing:${config.letterSpacing}px;`;
+
+    return {width,height};
+}
+
+export function changeStyle(styles){
+    
+    for(const style in styles){
+        if (styles[style]){
+            config[style]=parseInt(styles[style]).toFixed(2)
+        }
+    }
+
+    characterSize = calcSize();
+    whiteBoard(); //se recarga el tablero
+    return;
+}
+
+function whiteBoard(){
+    asciiContainer.innerHTML="";
+    asciiContainer.textContent="";
+    return;
+}
 
 export function cleanBoard(){
     clearInterval(intervalId);
-    asciiContainer.innerHTML="";
-    asciiContainer.textContent="";
+    whiteBoard();
     console.log("board Cleaned");
+
+    return;
 }
 
 //we have to send the video to a canvas
@@ -54,7 +81,7 @@ export function asciiGenerator(stream) {
     canvas.height = height;
     canvas.style="display:none";
 
-    asciiContainer.style = `font-size:${fontSize}px; text:black; line-height:${lineHeight}px; letter-spacing:${letterSpacing}px;`;
+    asciiContainer.style = `font-size:${config.fontSize}px; text:black; line-height:${config.lineHeight}px; letter-spacing:${config.letterSpacing}px;`;
     
     /*el recorte de la imagenn va a depender de: 
         -tamaño de la fuente
@@ -75,8 +102,8 @@ export function asciiGenerator(stream) {
         console.log(asciiW,asciiH);
 
         // cantidad de caracteres que caben
-        const cols = Math.floor(asciiW / characterWidth);
-        const rows = Math.floor(asciiH / characterHeight);
+        const cols = Math.floor(asciiW / characterSize.width);
+        const rows = Math.floor(asciiH / characterSize.height);
 
         // factores de escala (video px / caracter)
         const scaleX = Math.floor(width / cols);
