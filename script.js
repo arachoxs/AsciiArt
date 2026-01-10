@@ -1,4 +1,4 @@
-import { asciiGenerator , cleanBoard , changeStyle} from "./asciiService.mjs";
+import { asciiGenerator , cleanBoard , changeStyle, activateDynamicColors} from "./asciiService.mjs";
 
 const MEDIAW = 1280;
 const MEDIAH = 720;
@@ -11,7 +11,7 @@ cameraButton.addEventListener("click",()=>{
     if(!useCamera){
         cameraActivate();
         useCamera=true;
-        cameraButton.getElementsByTagName("p")[0].textContent="Desactivar Camara";
+        cameraButton.getElementsByTagName("p")[0].textContent="deactivate Camera";
     }else{
         cameraDesactivate();
         cleanBoard();
@@ -28,6 +28,8 @@ styleForm.addEventListener("submit",(e)=>{
     e.preventDefault();
 
     var formData = new FormData(styleForm);
+    console.log(Object.fromEntries(formData));
+    activateDynamicColors(document.getElementById("dynamic-colors-input").checked);
     changeStyle(Object.fromEntries(formData))
 })
 

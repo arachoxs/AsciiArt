@@ -5,6 +5,11 @@ main{
     box-sizing: border-box;
 }
 
+svg {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
 main *{
     box-sizing: border-box;
 }

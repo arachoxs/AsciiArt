@@ -13,6 +13,8 @@ let characterSize = calcSize();
 
 let intervalId;
 
+let useColors = true;
+
 function calcSize(){
     const characterDiv = document.createElement("span");
     characterDiv.textContent="A";
@@ -39,12 +41,18 @@ export function changeStyle(styles){
     
     for(const style in styles){
         if (styles[style]){
-            config[style]=parseInt(styles[style]).toFixed(2)
+            config[style]=parseInt(styles[style]).toFixed(2);
         }
     }
 
     characterSize = calcSize();
     whiteBoard(); //se recarga el tablero
+    return;
+}
+
+export function activateDynamicColors(value){
+    console.log(value);
+    useColors=value;
     return;
 }
 
@@ -133,7 +141,7 @@ export function asciiGenerator(stream) {
                     g.toString(16).padStart(2, "0") +
                     b.toString(16).padStart(2, "0");
 
-                ascii += `<span style="color:${hex}">${chars[index]}</span>`;
+                ascii += `<span style="color:${useColors?hex:"white"}">${chars[index]}</span>`;
             }
             ascii += "\n";
         }
