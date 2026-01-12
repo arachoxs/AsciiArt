@@ -158,7 +158,7 @@ export async function asciiImage(file){
     canvas.height = height;
 
     //el contenedor toma el tamaño de la imagen para posteriormente dentor de ascci frame segun los tamaños de los caracteres se escale
-    asciiContainer.style.width = width + "px";
+    asciiContainer.style.minWidth = width + "px"; //para que si o si tome el tamaño de la imagen
     asciiContainer.style.height = height + "px";
 
     const asciiW = asciiContainer.getBoundingClientRect().width;
