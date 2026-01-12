@@ -10,6 +10,21 @@ svg {
     image-rendering: crisp-edges;
 }
 
+::-webkit-scrollbar {
+    width: 10px;    /* Ancho para scroll vertical */
+    height: 10px;   /* Alto para scroll horizontal */
+}
+
+::-webkit-scrollbar-track {
+    background: #031a0bbe;       
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #053015; 
+    border-radius: 10px;
+}
+
 main *{
     box-sizing: border-box;
 }

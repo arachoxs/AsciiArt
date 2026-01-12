@@ -1,11 +1,22 @@
-import { asciiGenerator , cleanBoard , changeStyle, activateDynamicColors} from "./asciiService.mjs";
+import { asciiVideo ,asciiImage, cleanBoard , changeStyle, activateDynamicColors} from "./asciiService.mjs";
 
 const MEDIAW = 1280;
 const MEDIAH = 720;
 let mediaObj;
 
 const cameraButton = document.getElementById("camera-trigger");
+const styleForm = document.getElementById("style-form");
+const imageInput = document.getElementById("image-input")
 let useCamera = false;
+
+//se obtiene el file y luego se debe obtener el url de la img
+imageInput.addEventListener("change",()=>{
+    const input = imageInput.files[0];
+    if(input){
+        console.log("se subieron archivos");
+        asciiImage(input);
+    }
+})
 
 cameraButton.addEventListener("click",()=>{
     if(!useCamera){
@@ -21,8 +32,6 @@ cameraButton.addEventListener("click",()=>{
 });
 
 //se obtiene la informacion del formualrio
-
-const styleForm = document.getElementById("style-form");
 
 styleForm.addEventListener("submit",(e)=>{
     e.preventDefault();
@@ -43,7 +52,7 @@ function cameraDesactivate(){
 
 export function cameraActivate(){
     navigator.mediaDevices.getUserMedia({ video: { width: MEDIAW, height: MEDIAH }, audio: false }).then(res => {
-        asciiGenerator(res);
+        asciiVideo(res);
         mediaObj=res;
     })
 }

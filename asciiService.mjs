@@ -1,5 +1,7 @@
-const videoElement = document.getElementById("video-container");
-const chars = ".'`^\",:;Il!i><~+_-?][}{1)(|\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
+const canvas = document.getElementById("canvas-container");
+const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+const chars = "@#W$9876543210?!abc;:+=-,._";
 const asciiContainer = document.getElementById("ascii-container");
 
 let config = {
@@ -13,7 +15,7 @@ let characterSize = calcSize();
 
 let intervalId;
 
-let useColors = true;
+let useColors = document.getElementById("dynamic-colors-input").checked;
 
 function calcSize(){
     const characterDiv = document.createElement("span");
@@ -32,11 +34,11 @@ function calcSize(){
     let { width, height } = characterDiv.getBoundingClientRect();
     document.body.removeChild(characterDiv);
 
-    asciiContainer.style = `font-size:${config.fontSize}px; text:black; line-height:${config.lineHeight}px; letter-spacing:${config.letterSpacing}px;`;
-
+    asciiContainer.style = `font-size:${config.fontSize}px; color:black; line-height:${config.lineHeight}px; letter-spacing:${config.letterSpacing}px;`;
     return {width,height};
 }
 
+//se debe poder cambiar el estilo y recargar el frame con el nuevo estilo
 export function changeStyle(styles){
     
     for(const style in styles){
@@ -45,13 +47,12 @@ export function changeStyle(styles){
         }
     }
 
-    characterSize = calcSize();
+    characterSize = calcSize(); //se recalculan los tamaños
     whiteBoard(); //se recarga el tablero
     return;
 }
 
 export function activateDynamicColors(value){
-    console.log(value);
     useColors=value;
     return;
 }
@@ -66,19 +67,116 @@ export function cleanBoard(){
     clearInterval(intervalId);
     whiteBoard();
     console.log("board Cleaned");
-
     return;
 }
 
+function asciiFrame(element,width,height){
+    ctx.drawImage(element, 0, 0, width, height); // se dibuja
+    const data = ctx.getImageData(0, 0, width, height).data; //se obtiene la informacion de los pixeles
+    // tamaño del contenedor ASCII (CSS px)
+    const asciiW = asciiContainer.getBoundingClientRect().width;
+    const asciiH = asciiContainer.getBoundingClientRect().height;
+
+    console.log(asciiW,asciiH);
+    // cantidad de caracteres que caben
+    const cols = Math.floor(asciiW / characterSize.width);
+    const rows = Math.floor(asciiH / characterSize.height);
+
+    // factores de escala (video px / caracter)
+    const scaleX = Math.floor(width / cols);
+    const scaleY = Math.floor(height / rows);
+
+    whiteBoard();
+    let ascii = "";
+    for (let y = 0; y < rows; y++) {
+        for (let x = cols-1; x >= 0; x--) {
+            // mapeo de grilla ASCII → video
+            const px = x * scaleX;
+            const py = y * scaleY;
+            const pixelIndex = (py * width + px) * 4;
+            const r = data[pixelIndex];
+            const g = data[pixelIndex + 1];
+            const b = data[pixelIndex + 2];
+            const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            const index = Math.floor(lum / 255 * (chars.length - 1));
+            const hex =
+                "#" +
+                r.toString(16).padStart(2, "0") +
+                g.toString(16).padStart(2, "0") +
+                b.toString(16).padStart(2, "0");
+            
+            if(useColors){
+                ascii += `<span style="color:${hex}">${chars[index]}</span>`;
+            }else{
+                ascii+=chars[index];
+            }
+        }
+        ascii += "\n";
+    }
+
+    if(useColors){
+        asciiContainer.innerHTML = ascii;
+    }else{
+        asciiContainer.textContent = ascii;
+    }
+
+    return;
+}   
+
+export async function asciiImage(file){
+    const reader = new FileReader();
+    let url;
+
+    await new Promise((resolve,reject)=>{
+        reader.addEventListener("load", () => {
+            resolve(reader.result);
+        });
+
+        return reader.readAsDataURL(file)
+    }).then((res)=>{
+        url=res;
+    })
+
+    let newImage = document.getElementById("img-container");
+    newImage.setAttribute("src",url);
+
+    let width;
+    let height;
+
+    await new Promise((resolve)=>{
+        newImage.onload = () =>{
+            resolve({width:newImage.width,height:newImage.height})
+        }
+    }).then((res)=>{
+        width = res.width;
+        height = res.height;
+    })
+    
+    console.log(width,height);
+    
+    canvas.width = width;
+    canvas.height = height;
+
+    //el contenedor toma el tamaño de la imagen para posteriormente dentor de ascci frame segun los tamaños de los caracteres se escale
+    asciiContainer.style.width = width + "px";
+    asciiContainer.style.height = height + "px";
+
+    const asciiW = asciiContainer.getBoundingClientRect().width;
+    const asciiH = asciiContainer.getBoundingClientRect().height;
+    
+    console.log(asciiW,asciiH);
+    
+    
+    asciiFrame(newImage,width,height);
+}
+
 //we have to send the video to a canvas
-export function asciiGenerator(stream) {
+export function asciiVideo(stream) {
+    const videoElement = document.getElementById("video-container");
+
     videoElement.srcObject = stream;
     videoElement.play();
     videoElement.style="display:none";
-
-    //se necesita enviar el video a un canva para leer cada pixel del frame
-    const canvas = document.getElementById("canvas-container");
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
     //se obtiene la configuración de w,h del video
     const track = stream.getVideoTracks()[0];
@@ -100,54 +198,6 @@ export function asciiGenerator(stream) {
     
     //como es un texto necesitamos actualizar continuamente nuestro contenedor
     intervalId = setInterval(() => {
-        ctx.drawImage(videoElement, 0, 0, width, height);
-        const data = ctx.getImageData(0, 0, width, height).data;
-
-        // tamaño del contenedor ASCII (CSS px)
-        const asciiW = asciiContainer.getBoundingClientRect().width;
-        const asciiH = asciiContainer.getBoundingClientRect().height;
-
-        console.log(asciiW,asciiH);
-
-        // cantidad de caracteres que caben
-        const cols = Math.floor(asciiW / characterSize.width);
-        const rows = Math.floor(asciiH / characterSize.height);
-
-        // factores de escala (video px / caracter)
-        const scaleX = Math.floor(width / cols);
-        const scaleY = Math.floor(height / rows);
-
-        let ascii = "";
-
-        for (let y = 0; y < rows; y++) {
-            for (let x = cols-1; x >= 0; x--) {
-
-                // mapeo de grilla ASCII → video
-                const px = x * scaleX;
-                const py = y * scaleY;
-
-                const pixelIndex = (py * width + px) * 4;
-
-                const r = data[pixelIndex];
-                const g = data[pixelIndex + 1];
-                const b = data[pixelIndex + 2];
-
-                const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-                const index = Math.floor(lum / 255 * (chars.length - 1));
-
-                const hex =
-                    "#" +
-                    r.toString(16).padStart(2, "0") +
-                    g.toString(16).padStart(2, "0") +
-                    b.toString(16).padStart(2, "0");
-
-                ascii += `<span style="color:${useColors?hex:"white"}">${chars[index]}</span>`;
-            }
-            ascii += "\n";
-        }
-
-        asciiContainer.innerHTML = ascii;
-
-}, 100);
-
+        asciiFrame(videoElement,width,height);
+    }, 100);
 }
