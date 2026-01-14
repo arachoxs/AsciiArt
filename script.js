@@ -1,5 +1,6 @@
 import { asciiVideo ,asciiImage, cleanBoard , changeStyle, activateDynamicColors} from "./asciiService.mjs";
 
+
 const MEDIAW = 1280;
 const MEDIAH = 720;
 let mediaObj;
@@ -13,45 +14,60 @@ let useCamera = false;
 imageInput.addEventListener("change",()=>{
     const input = imageInput.files[0];
     if(input){
+        cameraElementDesactivate();
         console.log("se subieron archivos");
         asciiImage(input);
-    }
+    }   
 })
 
-cameraButton.addEventListener("click",()=>{
+function cameraElementDesactivate(){
+        if(useCamera){
+            cameraDesactivate();
+            useCamera=false;
+            cameraButton.getElementsByTagName("p")[0].textContent="Use Camera";
+        }
+}
+
+function handleCameraChange(){
     if(!useCamera){
         cameraActivate();
         useCamera=true;
         cameraButton.getElementsByTagName("p")[0].textContent="deactivate Camera";
     }else{
-        cameraDesactivate();
-        cleanBoard();
-        useCamera=false;
-        cameraButton.getElementsByTagName("p")[0].textContent="Use Camera";
+        cameraElementDesactivate();
     }
-});
+}
+
+cameraButton.addEventListener("click", handleCameraChange);
 
 //se obtiene la informacion del formualrio
 
 styleForm.addEventListener("submit",(e)=>{
     e.preventDefault();
-
     var formData = new FormData(styleForm);
     console.log(Object.fromEntries(formData));
     activateDynamicColors(document.getElementById("dynamic-colors-input").checked);
-    changeStyle(Object.fromEntries(formData))
+    changeStyle(Object.fromEntries(formData));
+
+    const input = imageInput.files[0];
+    if(input){
+        asciiImage(input)
+    }
 })
 
 
 function cameraDesactivate(){
+    cleanBoard();
     let videoTrack = mediaObj.getVideoTracks()[0];
-    videoTrack.stop();
-    mediaObj.removeTrack(videoTrack);
-    console.log(mediaObj);
+    if(videoTrack){
+        videoTrack.stop();
+        mediaObj.removeTrack(videoTrack);
+        console.log(mediaObj);
+    }
 }
 
 export function cameraActivate(){
-    navigator.mediaDevices.getUserMedia({ video: { width: MEDIAW, height: MEDIAH }, audio: false }).then(res => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(res => {
         asciiVideo(res);
         mediaObj=res;
     })

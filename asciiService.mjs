@@ -4,6 +4,8 @@ const ctx = canvas.getContext("2d", { willReadFrequently: true });
 const chars = "@#W$9876543210?!abc;:+=-,._";
 const asciiContainer = document.getElementById("ascii-container");
 
+let actualElement;
+
 let config = {
     letterSpacing:4,
     lineHeight:7,
@@ -42,19 +44,21 @@ function calcSize(){
 
 //se debe poder cambiar el estilo y recargar el frame con el nuevo estilo
 export function changeStyle(styles){
+    console.log("entro changeStyle");
     
-    for(const style in styles){
-        if (styles[style]){
+
+    for(const style in styles){        
+        if (styles[style]){            
             config[style]=parseInt(styles[style]).toFixed(2);
         }
     }
 
     characterSize = calcSize(); //se recalculan los tamaños
-    whiteBoard(); //se limpia el tablero
+    // se debe re generar la imagen
     return;
 }
 
-export function activateDynamicColors(value){
+export async function activateDynamicColors(value){
     useColors=value;
     return;
 }
@@ -73,6 +77,9 @@ export function cleanBoard(){
 }
 
 function asciiFrame(element,width,height){
+    console.log("entro");
+    
+
     ctx.drawImage(element, 0, 0, width, height); // se dibuja
     const data = ctx.getImageData(0, 0, width, height).data; //se obtiene la informacion de los pixeles
         
@@ -127,6 +134,14 @@ function asciiFrame(element,width,height){
     return;
 }   
 
+async function getImageSize (image){
+    return new Promise((resolve)=>{
+        image.onload = () =>{
+            resolve({width:image.width,height:image.height})
+        }
+    })
+}
+
 export async function asciiImage(file){
     const reader = new FileReader();
     let url;
@@ -144,17 +159,7 @@ export async function asciiImage(file){
     let newImage = document.getElementById("img-container");
     newImage.setAttribute("src",url);
 
-    let width;
-    let height;
-
-    await new Promise((resolve)=>{
-        newImage.onload = () =>{
-            resolve({width:newImage.width,height:newImage.height})
-        }
-    }).then((res)=>{
-        width = res.width;
-        height = res.height;
-    })
+    let {width,height} = await getImageSize(newImage);
     
     console.log(width,height);
     
@@ -170,7 +175,8 @@ export async function asciiImage(file){
     const asciiH = asciiContainer.getBoundingClientRect().height;
     
     console.log(asciiW,asciiH);
-    
+
+    actualElement = newImage; //esto sirve para el re renderizado cuando se cambian los colores
     asciiFrame(newImage,width,height);
 }
 
