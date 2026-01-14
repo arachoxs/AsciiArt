@@ -23,18 +23,20 @@ function calcSize(){
     characterDiv.style.cssText = `
         position: absolute;
         visibility: hidden;
-        font-family: monospace;
         font-size: ${config.fontSize}px;
         letter-spacing: ${config.letterSpacing}px;
         line-height: ${config.lineHeight}px;
     `;
 
-    document.body.appendChild(characterDiv);
+    asciiContainer.appendChild(characterDiv);
 
     let { width, height } = characterDiv.getBoundingClientRect();
-    document.body.removeChild(characterDiv);
+    asciiContainer.removeChild(characterDiv);
 
-    asciiContainer.style = `font-size:${config.fontSize}px; color:black; line-height:${config.lineHeight}px; letter-spacing:${config.letterSpacing}px;`;
+    asciiContainer.style.fontSize = config.fontSize + "px";
+    asciiContainer.style.lineHeight = config.lineHeight + "px";
+    asciiContainer.style.letterSpacing = config.letterSpacing + "px";
+
     return {width,height};
 }
 
@@ -48,7 +50,7 @@ export function changeStyle(styles){
     }
 
     characterSize = calcSize(); //se recalculan los tamaños
-    whiteBoard(); //se recarga el tablero
+    whiteBoard(); //se limpia el tablero
     return;
 }
 
@@ -73,6 +75,7 @@ export function cleanBoard(){
 function asciiFrame(element,width,height){
     ctx.drawImage(element, 0, 0, width, height); // se dibuja
     const data = ctx.getImageData(0, 0, width, height).data; //se obtiene la informacion de los pixeles
+        
     // tamaño del contenedor ASCII (CSS px)
     const asciiW = asciiContainer.getBoundingClientRect().width;
     const asciiH = asciiContainer.getBoundingClientRect().height;
@@ -83,42 +86,43 @@ function asciiFrame(element,width,height){
     const rows = Math.floor(asciiH / characterSize.height);
 
     // factores de escala (video px / caracter)
-    const scaleX = Math.floor(width / cols);
-    const scaleY = Math.floor(height / rows);
+    const scaleX = width / cols;
+    const scaleY = height / rows;
 
     whiteBoard();
+
     let ascii = "";
+    
     for (let y = 0; y < rows; y++) {
-        for (let x = cols-1; x >= 0; x--) {
+        for (let x = 0; x < cols; x++) {
             // mapeo de grilla ASCII → video
-            const px = x * scaleX;
-            const py = y * scaleY;
+            const px = Math.floor(x * scaleX);
+            const py = Math.floor(y * scaleY);
             const pixelIndex = (py * width + px) * 4;
             const r = data[pixelIndex];
             const g = data[pixelIndex + 1];
             const b = data[pixelIndex + 2];
             const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
             const index = Math.floor(lum / 255 * (chars.length - 1));
-            const hex =
-                "#" +
-                r.toString(16).padStart(2, "0") +
-                g.toString(16).padStart(2, "0") +
-                b.toString(16).padStart(2, "0");
-            
+
             if(useColors){
+                const hex =
+                    "#" +
+                    r.toString(16).padStart(2, "0") +
+                    g.toString(16).padStart(2, "0") +
+                    b.toString(16).padStart(2, "0");
+            
+
                 ascii += `<span style="color:${hex}">${chars[index]}</span>`;
             }else{
                 ascii+=chars[index];
             }
         }
-        ascii += "\n";
+
+        ascii+="<br/>";
     }
 
-    if(useColors){
-        asciiContainer.innerHTML = ascii;
-    }else{
-        asciiContainer.textContent = ascii;
-    }
+    asciiContainer.innerHTML = ascii;
 
     return;
 }   
@@ -158,14 +162,13 @@ export async function asciiImage(file){
     canvas.height = height;
 
     //el contenedor toma el tamaño de la imagen para posteriormente dentor de ascci frame segun los tamaños de los caracteres se escale
-    asciiContainer.style.minWidth = width + "px"; //para que si o si tome el tamaño de la imagen
-    asciiContainer.style.height = height + "px";
+    asciiContainer.style.minWidth = width + "px"; 
+    asciiContainer.style.minHeight = height + "px";
 
     const asciiW = asciiContainer.getBoundingClientRect().width;
     const asciiH = asciiContainer.getBoundingClientRect().height;
     
     console.log(asciiW,asciiH);
-    
     
     asciiFrame(newImage,width,height);
 }
@@ -187,8 +190,13 @@ export function asciiVideo(stream) {
     canvas.height = height;
     canvas.style="display:none";
 
-    asciiContainer.style = `font-size:${config.fontSize}px; text:black; line-height:${config.lineHeight}px; letter-spacing:${config.letterSpacing}px;`;
-    
+    //para camara se mantiene el ancho del componente padre
+
+    asciiContainer.style.minWidth = "100%";
+    asciiContainer.style.minHeight = "100%";
+
+    console.log("entro");
+        
     /*el recorte de la imagenn va a depender de: 
         -tamaño de la fuente
         -line-height
