@@ -1,44 +1,62 @@
 import { asciiVideo ,asciiImage, cleanBoard , changeStyle, activateDynamicColors} from "./asciiService.mjs";
 
-
-const MEDIAW = 1280;
-const MEDIAH = 720;
-let mediaObj;
-
-const cameraButton = document.getElementById("camera-trigger");
+const cameraButton = document.getElementById("camera-input");
 const styleForm = document.getElementById("style-form");
-const imageInput = document.getElementById("image-input")
+const imageInput = document.getElementById("image-input");
+
+let mediaObj;
 let useCamera = false;
 
-//se obtiene el file y luego se debe obtener el url de la img
+//el event de use image
 imageInput.addEventListener("change",()=>{
     const input = imageInput.files[0];
     if(input){
-        cameraElementDesactivate();
+        cameraDesactivate();
+        cleanBoard();
+        
         console.log("se subieron archivos");
         asciiImage(input);
     }   
 })
 
-function cameraElementDesactivate(){
-        if(useCamera){
-            cameraDesactivate();
-            useCamera=false;
-            cameraButton.getElementsByTagName("p")[0].textContent="Use Camera";
-        }
-}
-
-function handleCameraChange(){
+//evento de use Camera
+cameraButton.addEventListener("click", () => {
     if(!useCamera){
         cameraActivate();
-        useCamera=true;
-        cameraButton.getElementsByTagName("p")[0].textContent="deactivate Camera";
     }else{
-        cameraElementDesactivate();
+        cameraDesactivate();
+    }
+});
+
+function cameraDesactivate(){
+    if(mediaObj){
+        cleanBoard();
+
+        let videoTrack = mediaObj.getVideoTracks()[0];
+
+        useCamera=false;
+        cameraButton.getElementsByTagName("p")[0].textContent="Use Camera";
+        videoTrack.stop();
+        mediaObj.removeTrack(videoTrack);
+
+        mediaObj = null;
+        console.log(mediaObj);
     }
 }
 
-cameraButton.addEventListener("click", handleCameraChange);
+export function cameraActivate(){
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(res => {
+        if(imageInput){
+            imageInput.value = "";
+            cleanBoard();
+        }
+
+        useCamera=true;
+        cameraButton.getElementsByTagName("p")[0].textContent="deactivate Camera";
+        asciiVideo(res);
+        mediaObj=res;
+    })
+}
 
 //se obtiene la informacion del formualrio
 
@@ -54,21 +72,3 @@ styleForm.addEventListener("submit",(e)=>{
         asciiImage(input)
     }
 })
-
-
-function cameraDesactivate(){
-    cleanBoard();
-    let videoTrack = mediaObj.getVideoTracks()[0];
-    if(videoTrack){
-        videoTrack.stop();
-        mediaObj.removeTrack(videoTrack);
-        console.log(mediaObj);
-    }
-}
-
-export function cameraActivate(){
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(res => {
-        asciiVideo(res);
-        mediaObj=res;
-    })
-}

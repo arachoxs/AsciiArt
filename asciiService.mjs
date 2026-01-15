@@ -19,7 +19,7 @@ let intervalId;
 
 let useColors = document.getElementById("dynamic-colors-input").checked;
 
-function calcSize(){
+function calcSize(){ //funcion que permite calcular el tamaño de los caracteres para el uso dentro del contenedor
     const characterDiv = document.createElement("span");
     characterDiv.textContent="A";
     characterDiv.style.cssText = `
@@ -42,11 +42,22 @@ function calcSize(){
     return {width,height};
 }
 
-//se debe poder cambiar el estilo y recargar el frame con el nuevo estilo
-export function changeStyle(styles){
-    console.log("entro changeStyle");
-    
+function setAsciiContainerSize(width,height){
+    asciiContainer.style.width = width + "px"; 
+    asciiContainer.style.height = height + "px";
 
+    console.log("ascci containter dimension update  " + width + " " + height);   
+
+    const asciiW = asciiContainer.getBoundingClientRect().width;
+    const asciiH = asciiContainer.getBoundingClientRect().height;
+    
+    console.log(asciiW,asciiH);
+
+    return;
+}
+
+//se debe poder cambiar el estilo y recargar el frame con el nuevo estilo
+export function changeStyle(styles){    
     for(const style in styles){        
         if (styles[style]){            
             config[style]=parseInt(styles[style]).toFixed(2);
@@ -70,17 +81,27 @@ function whiteBoard(){
 }
 
 export function cleanBoard(){
-    clearInterval(intervalId);
+    if(intervalId){
+        clearInterval(intervalId);
+    }
     whiteBoard();
+    setAsciiContainerSize(0,0);
     console.log("board Cleaned");
     return;
 }
 
-function asciiFrame(element,width,height){
-    console.log("entro");
+function asciiFrame(element,width,height,mirror=false){
     
-
-    ctx.drawImage(element, 0, 0, width, height); // se dibuja
+    if(mirror){
+        ctx.save();
+        ctx.translate(width, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(element, 0, 0, width, height);
+        ctx.restore();
+    }else{
+        ctx.drawImage(element, 0, 0, width, height); // se dibuja
+    }
+    
     const data = ctx.getImageData(0, 0, width, height).data; //se obtiene la informacion de los pixeles
         
     // tamaño del contenedor ASCII (CSS px)
@@ -146,7 +167,7 @@ export async function asciiImage(file){
     const reader = new FileReader();
     let url;
 
-    await new Promise((resolve,reject)=>{
+    await new Promise((resolve)=>{
         reader.addEventListener("load", () => {
             resolve(reader.result);
         });
@@ -167,9 +188,7 @@ export async function asciiImage(file){
     canvas.height = height;
 
     //el contenedor toma el tamaño de la imagen para posteriormente dentor de ascci frame segun los tamaños de los caracteres se escale
-    asciiContainer.style.minWidth = width + "px"; 
-    asciiContainer.style.minHeight = height + "px";
-    
+    setAsciiContainerSize(width,height);
 
     const asciiW = asciiContainer.getBoundingClientRect().width;
     const asciiH = asciiContainer.getBoundingClientRect().height;
@@ -199,8 +218,8 @@ export function asciiVideo(stream) {
 
     //para camara se mantiene el ancho del componente padre
 
-    asciiContainer.style.minWidth = "100%";
-    asciiContainer.style.minHeight = "100%";
+    asciiContainer.style.width = "100%";
+    asciiContainer.style.height = "100%";
 
     console.log("entro");
         
@@ -213,6 +232,6 @@ export function asciiVideo(stream) {
     
     //como es un texto necesitamos actualizar continuamente nuestro contenedor
     intervalId = setInterval(() => {
-        asciiFrame(videoElement,width,height);
+        asciiFrame(videoElement,width,height,true);
     }, 100);
 }
