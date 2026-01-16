@@ -19,6 +19,7 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
 const asciiContainer = document.getElementById("ascii-container");
 
 let actualElement;
+let actualElementSize;
 
 let config = {
     letterSpacing:4,
@@ -56,7 +57,7 @@ function calcSize(){ //funcion que permite calcular el tamaño de los caracteres
     return {width,height};
 }
 
-function setAsciiContainerSize(width,height){
+function setAsciiContainerSize(asciiContainer,width,height){
     asciiContainer.style.width = width + "px"; 
     asciiContainer.style.height = height + "px";
 
@@ -92,15 +93,97 @@ export function cleanBoard(){
         clearInterval(intervalId);
     }
     whiteBoard();
-    setAsciiContainerSize(0,0);
+    setAsciiContainerSize(asciiContainer,0,0);
     console.log("board Cleaned");
     return;
 }
 
-function downloadFrame(){   
-    const asciiCanvas = document.createElement("canvas");
-    const asciiCanvasCtx = asciiCanvas.getContext("2d");
+export function downloadFrame(){   
+    //verificamos que el elemento sea un video para hacer la conversion del frame en IMG
+    if(actualElement.tagName == "VIDEO"){
+        asciiCanva(actualElement,actualElementSize.width,actualElementSize.height,true);
+    }
+    
+    asciiCanva(actualElement,actualElementSize.width,actualElementSize.height);
+}
 
+async function asciiCanva(element,width,height,mirror=false){ //to-do: separar funcionalidades
+    const elementCanva = document.createElement("canvas");
+    const ctx = elementCanva.getContext("2d");
+    elementCanva.width= width;
+    elementCanva.height = height;
+
+    if(mirror){
+        ctx.save();
+        ctx.translate(width, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(element, 0, 0, width, height);
+        ctx.restore();
+    }else{
+        ctx.drawImage(element, 0, 0, width, height); // se dibuja
+    }
+
+    const data = ctx.getImageData(0, 0, width, height).data;
+
+    //se crea el elemento canva donde se pondra el arte asci
+    const asciiCanva = new OffscreenCanvas(width,height);
+
+    const asciiCtx = asciiCanva.getContext("2d");
+
+    //se pinta el canvas de blanco o el color seleccionado
+    asciiCtx.fillStyle = "white";
+    asciiCtx.fillRect(0, 0, width, height);
+    asciiCtx.fillStyle = "black";
+    asciiCtx.textBaseline = "top";
+    
+    asciiCtx.font = `${config.fontSize}px monospace`
+
+    // cantidad de caracteres que caben
+    const cols = Math.floor(width / characterSize.width);
+    const rows = Math.floor(height / characterSize.height);
+
+    // factores de escala (video px / caracter)
+    const scaleX = width / cols;
+    const scaleY = height / rows;
+
+    for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+            const px = Math.floor(x * scaleX);
+            const py = Math.floor(y * scaleY);
+            const pixelIndex = (py * width + px) * 4;
+            const r = data[pixelIndex];
+            const g = data[pixelIndex + 1];
+            const b = data[pixelIndex + 2];
+            const lum = LUMINANCE_WEIGHTS.R * r + LUMINANCE_WEIGHTS.G * g + LUMINANCE_WEIGHTS.B * b;
+            const index = Math.floor(lum / 255 * (chars.length - 1));
+
+            asciiCtx.fillText(chars[index], x * characterSize.width, y * characterSize.height);
+        }
+    }
+
+    let src = await asciiCanva.convertToBlob().then(async blob => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob); 
+        
+        const getLink = new Promise ((resolve) => {
+            reader.onloadend = () => {
+                resolve(reader.result);
+            }
+        });
+
+        return await getLink;
+    })
+
+    console.log(src);
+    
+
+    var a = document.createElement('a');
+    a.href = src;
+    a.download = "output.jpg";
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
 
 }
 
@@ -199,20 +282,23 @@ export async function asciiImage(file){
     width = resized.width;
     height = resized.height;
 
+
     console.log(width,height);
     
     canvas.width = width;
     canvas.height = height;
 
     //el contenedor toma el tamaño de la imagen para posteriormente dentor de ascci frame segun los tamaños de los caracteres se escale
-    setAsciiContainerSize(width,height);
+    setAsciiContainerSize(asciiContainer,width,height);
 
     const asciiW = asciiContainer.getBoundingClientRect().width;
     const asciiH = asciiContainer.getBoundingClientRect().height;
     
     console.log(asciiW,asciiH);
 
-    actualElement = newImage; //esto sirve para generar la imagen del ascii art
+    actualElement = newImage; 
+    actualElementSize = resized;
+    //esto sirve para generar la imagen del ascii art
     asciiFrame(newImage,width,height);
 }
 
@@ -232,7 +318,9 @@ export function asciiVideo(stream) {
     width = resized.width;
     height = resized.height;
 
-    //se obtiene el canva para procesar el frame
+    console.log(resized);
+
+    //se ajusta el canva para procesar el frame
     canvas.width = width;
     canvas.height = height;
     canvas.style="display:none";
@@ -253,6 +341,7 @@ export function asciiVideo(stream) {
     
     //como es un texto necesitamos actualizar continuamente nuestro contenedor
     actualElement = videoElement;
+    actualElementSize = resized;
 
     intervalId = setInterval(() => {
         asciiFrame(videoElement,width,height,true);
