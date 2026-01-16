@@ -16,12 +16,11 @@
     <canvas id="canvas-container" class="hidden"></canvas>
 
     <main class="flex bg-green-950/30 min-h-screen md:flex-row flex-col-reverse m-0 w-full">
-        <div class="relative bg-green-400/20 box-border flex items-center justify-center overflow-scroll md:w-8/10 min-h-screen max-h-screen md:min-h-auto md:mx-3 my-3 p-2 md:p-3 max-w-full"> <!--quitar pading x fue para pruebas-->
-            <p id="ascii-container" class="absolute top-0 left-0 md:left-auto mx-auto text-center font-mono"></p>
+        <div class="relative bg-green-400/20 box-border overflow-scroll md:w-8/10 min-h-screen max-h-screen md:min-h-auto md:mx-3 my-3 p-2 max-w-full"> <!--quitar pading x fue para pruebas-->
+            <p id="ascii-container" class="bg-white text-black mx-auto text-center font-mono"></p>
         </div>
         <div class="relative flex-1 flex flex-col max-h-screen text-green-700 min-h-100 bg-green-950/10 ml-2 mr-4 my-3 md:mr-5 md:my-3
             text-[10px]
-            leading-2.5
             tracking-[0.5px]
         ">
             <header class="bg-green-950/30 flex flex-col py-1 w-full h-fit">
@@ -31,19 +30,22 @@
 
             <section class="flex flex-col mt-3 w-full flex-1">
                 <div class="flex justify-around w-full flex-wrap mt-0 px-2 gap-4">
-                    <button id="camera-input" class="flex-1 flex flex-col h-20 justify-center items-center border-4 cursor-pointer border-green-950/30">
+                    <button id="camera-input" class="flex-1 flex flex-col gap-1 h-20 justify-center items-center border-4 cursor-pointer border-green-950/30">
                         <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M9 3H7v2H2v16h20V5h-5V3H9zm8 4h3v12H4V7h5V5h6v2h2zm-7 2h4v2h-4V9zm4 6h-4v2h4v-2h2v-4h-2v4zm-6-4h2v4H8v-4z" fill="currentColor"/> </svg>
-                        <p class="text-lg">Use Camera</p>
+                        <p class="text-lg leading-4">Use Camera</p>
                     </button>
 
-                    <label class="flex-1 h-20 flex flex-col justify-center items-center border-4 cursor-pointer border-green-950/30">
+                    <label class="flex-1 h-20 flex flex-col gap-1 justify-center items-center border-4 cursor-pointer border-green-950/30">
                         <input type="file" accept="image/*" id="image-input" class="hidden"/>
-                        <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M4 3H2v18h20V3H4zm16 2v14H4V5h16zm-6 4h-2v2h-2v2H8v2H6v2h2v-2h2v-2h2v-2h2v2h2v2h2v-2h-2v-2h-2V9zM8 7H6v2h2V7z" fill="currentColor"/> </svg>                      
-                        <p class="text-lg">Use Image</p>
+                        <div class="flex flex-col gap-1 justify-center items-center">
+                            <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M4 3H2v18h20V3H4zm16 2v14H4V5h16zm-6 4h-2v2h-2v2H8v2H6v2h2v-2h2v-2h2v-2h2v2h2v2h2v-2h-2v-2h-2V9zM8 7H6v2h2V7z" fill="currentColor"/> </svg>                      
+                            <p class="text-lg leading-4">Use Image</p>
+                        </div>
+                        
                     </label>
                 </div>
 
-                <form class="flex flex-col mt-4 text-xl gap-1 px-4" id="style-form">
+                <form class="flex flex-col mt-4 text-xl gap-2 px-2 leading-5" id="style-form">
                     <div class="flex gap-2">
                         <label>Font\Size></label>
                         <input class="w-full" name="fontSize" type="number" id="font-size-input" class="w-full" placeholder="px"/>
@@ -69,6 +71,10 @@
                         <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M18 2h-2v2h-2v2h-2v2h-2v2H8v2H6v2H4v2H2v6h6v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2V8h2V6h-2V4h-2V2zm0 8h-2v2h-2v2h-2v2h-2v2H8v-2H6v-2h2v-2h2v-2h2V8h2V6h2v2h2v2zM6 16H4v4h4v-2H6v-2z" fill="currentColor"/> </svg>
                     </button>
                 </form>
+
+                <button type="button" id="download-button" class="flex mt-6 mx-2 h-12 gap-2 justify-center items-center border-4 cursor-pointer border-green-950/30">
+                    <p class="text-lg">Download</p>
+                </button>
             </section>
             
         </div>

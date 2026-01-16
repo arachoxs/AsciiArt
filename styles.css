@@ -11,18 +11,8 @@ svg {
 }
 
 ::-webkit-scrollbar {
-    width: 10px;    /* Ancho para scroll vertical */
-    height: 10px;   /* Alto para scroll horizontal */
-}
-
-::-webkit-scrollbar-track {
-    background: #031a0bbe;       
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #053015; 
-    border-radius: 10px;
+    width: 0;    /* Ancho para scroll vertical */
+    height: 0;   /* Alto para scroll horizontal */
 }
 
 main *{

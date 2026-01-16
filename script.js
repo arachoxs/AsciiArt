@@ -1,8 +1,10 @@
-import { asciiVideo ,asciiImage, cleanBoard , changeStyle, activateDynamicColors} from "./asciiService.mjs";
+import { asciiVideo ,asciiImage, cleanBoard , changeStyle, activateDynamicColors , downloadFrame} from "./asciiService.mjs";
 
 const cameraButton = document.getElementById("camera-input");
 const styleForm = document.getElementById("style-form");
 const imageInput = document.getElementById("image-input");
+
+const downloadButton = document.getElementById("download-button");
 
 let mediaObj;
 let useCamera = false;
@@ -27,6 +29,10 @@ cameraButton.addEventListener("click", () => {
         cameraDesactivate();
     }
 });
+
+//evento de download button
+
+downloadButton.addEventListener("click", downloadFrame )
 
 function cameraDesactivate(){
     if(mediaObj){

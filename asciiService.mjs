@@ -97,6 +97,13 @@ export function cleanBoard(){
     return;
 }
 
+function downloadFrame(){   
+    const asciiCanvas = document.createElement("canvas");
+    const asciiCanvasCtx = asciiCanvas.getContext("2d");
+
+
+}
+
 function asciiFrame(element,width,height,mirror=false){
     if(mirror){
         ctx.save();
@@ -148,7 +155,7 @@ function asciiFrame(element,width,height,mirror=false){
 
                 ascii += `<span style="color:${hex}">${chars[index]}</span>`;
             }else{
-                ascii+=chars[index];
+                ascii += chars[index];
             }
         }
 
@@ -205,7 +212,7 @@ export async function asciiImage(file){
     
     console.log(asciiW,asciiH);
 
-    actualElement = newImage; //esto sirve para el re renderizado cuando se cambian los colores
+    actualElement = newImage; //esto sirve para generar la imagen del ascii art
     asciiFrame(newImage,width,height);
 }
 
@@ -245,6 +252,8 @@ export function asciiVideo(stream) {
     */
     
     //como es un texto necesitamos actualizar continuamente nuestro contenedor
+    actualElement = videoElement;
+
     intervalId = setInterval(() => {
         asciiFrame(videoElement,width,height,true);
     }, REFRESH_RATE_MS);
