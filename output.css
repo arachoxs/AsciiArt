@@ -187,9 +187,6 @@
   .m-0 {
     margin: calc(var(--spacing) * 0);
   }
-  .mx-4 {
-    margin-inline: calc(var(--spacing) * 4);
-  }
   .mx-auto {
     margin-inline: auto;
   }
@@ -261,10 +258,6 @@
   }
   .border-collapse {
     border-collapse: collapse;
-  }
-  .-scale-x-100 {
-    --tw-scale-x: calc(100% * -1);
-    scale: var(--tw-scale-x) var(--tw-scale-y);
   }
   .cursor-pointer {
     cursor: pointer;
@@ -420,19 +413,19 @@
       display: none;
     }
   }
+  .md\:top-auto {
+    @media (width >= 48rem) {
+      top: auto;
+    }
+  }
+  .md\:left-auto {
+    @media (width >= 48rem) {
+      left: auto;
+    }
+  }
   .md\:mx-3 {
     @media (width >= 48rem) {
       margin-inline: calc(var(--spacing) * 3);
-    }
-  }
-  .md\:mx-4 {
-    @media (width >= 48rem) {
-      margin-inline: calc(var(--spacing) * 4);
-    }
-  }
-  .md\:mx-5 {
-    @media (width >= 48rem) {
-      margin-inline: calc(var(--spacing) * 5);
     }
   }
   .md\:my-3 {
@@ -489,21 +482,6 @@ svg {
 main * {
   box-sizing: border-box;
 }
-@property --tw-scale-x {
-  syntax: "*";
-  inherits: false;
-  initial-value: 1;
-}
-@property --tw-scale-y {
-  syntax: "*";
-  inherits: false;
-  initial-value: 1;
-}
-@property --tw-scale-z {
-  syntax: "*";
-  inherits: false;
-  initial-value: 1;
-}
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
@@ -525,9 +503,6 @@ main * {
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
-      --tw-scale-x: 1;
-      --tw-scale-y: 1;
-      --tw-scale-z: 1;
       --tw-border-style: solid;
       --tw-leading: initial;
       --tw-tracking: initial;

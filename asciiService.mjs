@@ -2,6 +2,20 @@ const canvas = document.getElementById("canvas-container");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
 const chars = "@#W$9876543210?!abc;:+=-,._";
+const LUMINANCE_WEIGHTS = { R: 0.2126, G: 0.7152, B: 0.0722 };
+const REFRESH_RATE_MS = 100;
+
+const MAX_WIDTH = 1920;
+const MAX_HEIGHT = 1080;
+
+function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
+    const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+    if (ratio < 1) {
+         return { width: Math.round(srcWidth * ratio), height: Math.round(srcHeight * ratio) };
+    }
+    return { width: srcWidth, height: srcHeight };
+}
+
 const asciiContainer = document.getElementById("ascii-container");
 
 let actualElement;
@@ -46,13 +60,6 @@ function setAsciiContainerSize(width,height){
     asciiContainer.style.width = width + "px"; 
     asciiContainer.style.height = height + "px";
 
-    console.log("ascci containter dimension update  " + width + " " + height);   
-
-    const asciiW = asciiContainer.getBoundingClientRect().width;
-    const asciiH = asciiContainer.getBoundingClientRect().height;
-    
-    console.log(asciiW,asciiH);
-
     return;
 }
 
@@ -91,7 +98,6 @@ export function cleanBoard(){
 }
 
 function asciiFrame(element,width,height,mirror=false){
-    
     if(mirror){
         ctx.save();
         ctx.translate(width, 0);
@@ -108,7 +114,6 @@ function asciiFrame(element,width,height,mirror=false){
     const asciiW = asciiContainer.getBoundingClientRect().width;
     const asciiH = asciiContainer.getBoundingClientRect().height;
 
-    console.log(asciiW,asciiH);
     // cantidad de caracteres que caben
     const cols = Math.floor(asciiW / characterSize.width);
     const rows = Math.floor(asciiH / characterSize.height);
@@ -130,7 +135,7 @@ function asciiFrame(element,width,height,mirror=false){
             const r = data[pixelIndex];
             const g = data[pixelIndex + 1];
             const b = data[pixelIndex + 2];
-            const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            const lum = LUMINANCE_WEIGHTS.R * r + LUMINANCE_WEIGHTS.G * g + LUMINANCE_WEIGHTS.B * b;
             const index = Math.floor(lum / 255 * (chars.length - 1));
 
             if(useColors){
@@ -182,6 +187,10 @@ export async function asciiImage(file){
 
     let {width,height} = await getImageSize(newImage);
     
+    const resized = calculateAspectRatioFit(width, height, MAX_WIDTH, MAX_HEIGHT);
+    width = resized.width;
+    height = resized.height;
+
     console.log(width,height);
     
     canvas.width = width;
@@ -209,7 +218,11 @@ export function asciiVideo(stream) {
 
     //se obtiene la configuración de w,h del video
     const track = stream.getVideoTracks()[0];
-    const { width, height } = track.getSettings();
+    let { width, height } = track.getSettings();
+
+    const resized = calculateAspectRatioFit(width, height, MAX_WIDTH, MAX_HEIGHT);
+    width = resized.width;
+    height = resized.height;
 
     //se obtiene el canva para procesar el frame
     canvas.width = width;
@@ -233,5 +246,5 @@ export function asciiVideo(stream) {
     //como es un texto necesitamos actualizar continuamente nuestro contenedor
     intervalId = setInterval(() => {
         asciiFrame(videoElement,width,height,true);
-    }, 100);
+    }, REFRESH_RATE_MS);
 }
