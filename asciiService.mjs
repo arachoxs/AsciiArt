@@ -9,8 +9,8 @@ const MAX_WIDTH = 1920;
 const MAX_HEIGHT = 1080;
 
 function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
-    const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
-    if (ratio < 1) {
+    const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight); // se calcula el radio y se toma el menor para que se mantenga la proporcion
+    if (ratio < 1) { // verifica que la resolucion objetivo sea menor a la resolucion actual
          return { width: Math.round(srcWidth * ratio), height: Math.round(srcHeight * ratio) };
     }
     return { width: srcWidth, height: srcHeight };
@@ -188,6 +188,7 @@ export async function asciiImage(file){
     let {width,height} = await getImageSize(newImage);
     
     const resized = calculateAspectRatioFit(width, height, MAX_WIDTH, MAX_HEIGHT);
+    
     width = resized.width;
     height = resized.height;
 
