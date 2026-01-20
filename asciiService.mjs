@@ -87,6 +87,7 @@ function calcSize(){ //funcion que permite calcular el tamaño de los caracteres
 function setAsciiContainerSize(asciiContainer,width,height){
     asciiContainer.style.width = width + "px"; 
     asciiContainer.style.height = height + "px";
+    asciiContainer.style.position = "static";
     return;
 }
 
@@ -389,6 +390,9 @@ export function asciiVideo(stream) {
 
     asciiContainer.style.width = "100%";
     asciiContainer.style.height = "100%";
+    asciiContainer.style.position = "absolute";
+    asciiContainer.style.top = "0";
+    asciiContainer.style.left = "0";
 
     console.log("entro");
         
