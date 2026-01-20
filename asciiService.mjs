@@ -27,12 +27,37 @@ let config = {
     fontSize:10
 }
 
+let colors = {
+    font:"white",
+    background:"black",
+}
+
 //se calcula desde un inicio el tamaño de los caracteres 
 let characterSize = calcSize();
 
 let intervalId;
 
 let useColors = document.getElementById("dynamic-colors-input").checked;
+
+function setInputs(){
+    document.getElementById("font-size-input").value = config.fontSize;
+    document.getElementById("letter-spacing-input").value = config.letterSpacing;
+    document.getElementById("line-height-input").value = config.lineHeight;
+
+    const toHex = (c) => {
+        const ctx = document.createElement("canvas").getContext("2d");
+        ctx.fillStyle = c;
+        return ctx.fillStyle;
+    }
+
+    document.getElementById("background-color-input").value = toHex(colors.background);
+    document.getElementById("chars-color-input").value = toHex(colors.font);
+    
+    activateDynamicColors();
+}
+
+setInputs();
+
 
 function calcSize(){ //funcion que permite calcular el tamaño de los caracteres para el uso dentro del contenedor
     const characterDiv = document.createElement("span");
@@ -60,25 +85,46 @@ function calcSize(){ //funcion que permite calcular el tamaño de los caracteres
 function setAsciiContainerSize(asciiContainer,width,height){
     asciiContainer.style.width = width + "px"; 
     asciiContainer.style.height = height + "px";
-
     return;
 }
 
 //se debe poder cambiar el estilo y recargar el frame con el nuevo estilo
 export function changeStyle(styles){    
-    for(const style in styles){        
-        if (styles[style]){            
-            config[style]=parseInt(styles[style]).toFixed(2);
+    // Config properties that affect layout/size
+    const layoutConfig = ['letterSpacing', 'lineHeight', 'fontSize'];
+    let layoutChanged = false;
+
+    for (const key in styles) {
+        if (layoutConfig.includes(key) && styles[key]) {
+            config[key] = parseFloat(styles[key]);
+            layoutChanged = true;
+        } else if (key === 'backgroundColor') {
+             colors.background = styles[key];
+        } else if (key === 'charsColor') {
+             colors.font = styles[key];
         }
     }
 
-    characterSize = calcSize(); //se recalculan los tamaños
-    // se debe re generar la imagen
+    if (layoutChanged) {
+        characterSize = calcSize(); //se recalculan los tamaños
+    }
+
+    // Si hay una imagen estática renderizada, la regeneramos para ver los cambios inmediatamente
+    if (actualElement && actualElement.tagName === "IMG") {
+         asciiFrame(actualElement, actualElementSize.width, actualElementSize.height);
+    }
+    // Si es video, el loop se encarga
     return;
 }
 
 export async function activateDynamicColors(value){
+    const CharactersColorInput = document.getElementById("chars-color-container");
     useColors=value;
+    if(useColors){
+        CharactersColorInput.style.display="none";
+    }else{
+        CharactersColorInput.style.display="flex";
+    }
     return;
 }
 
@@ -131,9 +177,9 @@ async function asciiCanva(element,width,height,mirror=false){ //to-do: separar f
     const asciiCtx = asciiCanva.getContext("2d");
 
     //se pinta el canvas de blanco o el color seleccionado
-    asciiCtx.fillStyle = "white";
+    asciiCtx.fillStyle = colors.background;
     asciiCtx.fillRect(0, 0, width, height);
-    asciiCtx.fillStyle = "black";
+    asciiCtx.fillStyle = colors.font;
     asciiCtx.textBaseline = "top";
     
     asciiCtx.font = `${config.fontSize}px monospace`
@@ -156,6 +202,10 @@ async function asciiCanva(element,width,height,mirror=false){ //to-do: separar f
             const b = data[pixelIndex + 2];
             const lum = LUMINANCE_WEIGHTS.R * r + LUMINANCE_WEIGHTS.G * g + LUMINANCE_WEIGHTS.B * b;
             const index = Math.floor(lum / 255 * (chars.length - 1));
+
+            if(useColors){
+                asciiCtx.fillStyle=`rgb(${r},${g},${b})`;
+            }
 
             asciiCtx.fillText(chars[index], x * characterSize.width, y * characterSize.height);
         }
@@ -203,6 +253,12 @@ function asciiFrame(element,width,height,mirror=false){
     // tamaño del contenedor ASCII (CSS px)
     const asciiW = asciiContainer.getBoundingClientRect().width;
     const asciiH = asciiContainer.getBoundingClientRect().height;
+
+    asciiContainer.style.backgroundColor = colors.background;
+
+    if(!useColors){
+        asciiContainer.style.color =  colors.font;
+    }
 
     // cantidad de caracteres que caben
     const cols = Math.floor(asciiW / characterSize.width);

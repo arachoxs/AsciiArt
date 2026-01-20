@@ -16,7 +16,7 @@
     <canvas id="canvas-container" class="hidden"></canvas>
 
     <main class="flex bg-green-950/30 min-h-screen md:flex-row flex-col-reverse m-0 w-full">
-        <div class="relative bg-green-400/20 box-border overflow-scroll md:w-8/10 min-h-screen max-h-screen md:min-h-auto md:mx-3 my-3 p-2 max-w-full"> <!--quitar pading x fue para pruebas-->
+        <div class="relative bg-green-800/30 box-border overflow-scroll md:w-8/10 min-h-screen max-h-screen md:min-h-auto md:mx-3 my-3 p-2 max-w-full"> <!--quitar pading x fue para pruebas-->
             <p id="ascii-container" class="bg-white text-black mx-auto text-center font-mono"></p>
         </div>
         <div class="relative flex-1 flex flex-col max-h-screen text-green-700 min-h-100 bg-green-950/10 ml-2 mr-4 my-3 md:mr-5 md:my-3
@@ -45,7 +45,9 @@
                     </label>
                 </div>
 
-                <form class="flex flex-col mt-4 text-xl gap-2 px-2 leading-5" id="style-form">
+                <form class="flex flex-col text-xl gap-2 px-2 leading-5" id="style-form">
+                    <hr class="border-green-700/30 mt-4 my-2"/>
+
                     <div class="flex gap-2">
                         <label>Font\Size></label>
                         <input class="w-full" name="fontSize" type="number" id="font-size-input" class="w-full" placeholder="px"/>
@@ -59,20 +61,37 @@
                         <input class="w-full " name="lineHeight" min="1" type="number" id="line-height-input" class="w-full" placeholder="px"/>
                     </div>
 
-                    <label class="flex justify-start mt-3 gap-3 w-fit items-center">
+                    <hr class="border-green-700/30 my-2"/>
+
+                    <label class="flex justify-start gap-3 w-fit items-center">
                         <input type="checkbox"  class="hidden peer" name="dynamicColors" id="dynamic-colors-input"/>
                         <svg fill="none" class="w-5 block peer-checked:hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M3 3h18v18H3V3zm16 16V5H5v14h14z" fill="currentColor"/> </svg>
                         <svg fill="none" class="w-5 hidden peer-checked:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M5 3H3v18h18V3H5zm0 2h14v14H5V5zm4 7H7v2h2v2h2v-2h2v-2h2v-2h2V8h-2v2h-2v2h-2v2H9v-2z" fill="currentColor"/> </svg>
                         <p>Dynamic colors (less fps)</p>
                     </label>
 
-                    <button type="submit" class="flex mt-4 h-12 gap-2 justify-center items-center border-4 cursor-pointer border-green-950/30">
+                    <div>
+                        <label class="flex gap-1 items-center ">
+                            <span class="flex-2">Background Color></span>
+                            <input class="w-full h-8 mt-1 flex-1" id="background-color-input" type="color" name="backgroundColor" id="background-color-input" value="#000000"/>
+                        </label>
+
+                        <label class="flex gap-1 items-center" id="chars-color-container">
+                            <span class="flex-2">Characters Color></span>
+                            <input class="w-full h-8 mt-1 flex-1" id="chars-color-input" type="color" name="charsColor" value="#000000"/>
+                        </label>
+                    </div>
+                    
+                    <hr class="border-green-700/30 my-2"/>
+
+                    <button type="submit" class="flex h-12 gap-2 justify-center items-center border-4 cursor-pointer border-green-950/30">
                         <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M18 2h-2v2h-2v2h-2v2h-2v2H8v2H6v2H4v2H2v6h6v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2V8h2V6h-2V4h-2V2zm0 8h-2v2h-2v2h-2v2h-2v2H8v-2H6v-2h2v-2h2v-2h2V8h2V6h2v2h2v2zM6 16H4v4h4v-2H6v-2z" fill="currentColor"/> </svg>
                         <p class="text-lg">Apply Style</p>
                     </button>
                 </form>
 
-                <button type="button" id="download-button" class="flex mt-6 mx-2 h-12 gap-2 justify-center items-center border-4 cursor-pointer border-green-950/30">
+                <button type="button" id="download-button" class="flex mt-2 mx-2 h-12 gap-2 justify-center items-center border-4 cursor-pointer border-green-950/30">
+                    <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M13 17V3h-2v10H9v-2H7v2h2v2h2v2h2zm8 2v-4h-2v4H5v-4H3v6h18v-2zm-8-6v2h2v-2h2v-2h-2v2h-2z" fill="currentColor"/> </svg>
                     <p class="text-lg">Download</p>
                 </button>
             </section>
