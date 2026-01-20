@@ -5,6 +5,9 @@ const styleForm = document.getElementById("style-form");
 const imageInput = document.getElementById("image-input");
 
 const downloadButton = document.getElementById("download-button");
+const captionButton = document.getElementById("caption-button");
+
+const changeCameraButton = document.getElementById("change-camera-button");
 
 let mediaObj;
 let useCamera = false;
@@ -32,11 +35,26 @@ cameraButton.addEventListener("click", () => {
 
 //evento de download button
 
-downloadButton.addEventListener("click", downloadFrame )
+downloadButton.addEventListener("click", downloadFrame);
+captionButton.addEventListener("click", downloadFrame);
+
+var front = false;
+
+changeCameraButton.addEventListener("click",() => {
+    front = !front;
+    if(useCamera){
+        cameraDesactivate();
+        cameraActivate();
+    }
+} )
+
 
 function cameraDesactivate(){
     if(mediaObj){
+        const cameraOptions = document.getElementById("camera-options");
         cleanBoard();
+
+        cameraOptions.style.display="none";
 
         let videoTrack = mediaObj.getVideoTracks()[0];
 
@@ -51,15 +69,20 @@ function cameraDesactivate(){
 }
 
 export function cameraActivate(){
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(res => {
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: front ? "user" : "environment"}, audio: false }).then(res => {
         if(imageInput){
             imageInput.value = "";
             cleanBoard();
         }
 
+        const cameraOptions = document.getElementById("camera-options");
+
+        cameraOptions.style.display="";
+        
+
         useCamera=true;
         cameraButton.getElementsByTagName("p")[0].textContent="deactivate Camera";
-        asciiVideo(res);
+        asciiVideo(res,front);
         mediaObj=res;
     })
 }

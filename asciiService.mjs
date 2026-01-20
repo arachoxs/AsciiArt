@@ -151,9 +151,9 @@ export function downloadFrame(){
     //verificamos que el elemento sea un video para hacer la conversion del frame en IMG
     if(actualElement.tagName == "VIDEO"){
         asciiCanva(actualElement,actualElementSize.width,actualElementSize.height,true);
+    }else{
+        asciiCanva(actualElement,actualElementSize.width,actualElementSize.height);  
     }
-    
-    asciiCanva(actualElement,actualElementSize.width,actualElementSize.height);
 }
 
 async function asciiCanva(element,width,height,mirror=false){ //to-do: separar funcionalidades
@@ -364,7 +364,7 @@ export async function asciiImage(file){
 }
 
 //we have to send the video to a canvas
-export function asciiVideo(stream) {
+export function asciiVideo(stream,front) {
     const videoElement = document.getElementById("video-container");
 
     videoElement.srcObject = stream;
@@ -409,6 +409,6 @@ export function asciiVideo(stream) {
     actualElementName = "videoPic"
 
     intervalId = setInterval(() => {
-        asciiFrame(videoElement,width,height,true);
+        asciiFrame(videoElement,width,height,front);
     }, REFRESH_RATE_MS);
 }
