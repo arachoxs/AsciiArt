@@ -18,8 +18,10 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
 
 const asciiContainer = document.getElementById("ascii-container");
 
+
 let actualElement;
 let actualElementSize;
+let actualElementName;
 
 let config = {
     letterSpacing:4,
@@ -229,7 +231,7 @@ async function asciiCanva(element,width,height,mirror=false){ //to-do: separar f
 
     var a = document.createElement('a');
     a.href = src;
-    a.download = "output.jpg";
+    a.download = `${actualElementName}_Ascii.jpg`;
     document.body.appendChild(a);
     a.click();
 
@@ -320,6 +322,7 @@ export async function asciiImage(file){
 
     await new Promise((resolve)=>{
         reader.addEventListener("load", () => {
+            console.log(reader);
             resolve(reader.result);
         });
 
@@ -354,6 +357,7 @@ export async function asciiImage(file){
 
     actualElement = newImage; 
     actualElementSize = resized;
+    actualElementName = file.name;
     //esto sirve para generar la imagen del ascii art
     asciiFrame(newImage,width,height);
 }
@@ -398,6 +402,7 @@ export function asciiVideo(stream) {
     //como es un texto necesitamos actualizar continuamente nuestro contenedor
     actualElement = videoElement;
     actualElementSize = resized;
+    actualElementName = "videoPic"
 
     intervalId = setInterval(() => {
         asciiFrame(videoElement,width,height,true);
