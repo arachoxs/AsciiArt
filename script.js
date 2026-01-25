@@ -52,6 +52,13 @@ cameraButton.addEventListener("click", () => {
 downloadButton.addEventListener("click", downloadFrame);
 captionButton.addEventListener("click", downloadFrame);
 
+captionButton.addEventListener("click", () => {
+    captionButton.style.backgroundColor = "rgba(22, 101, 52, 0.9)";
+    setTimeout(() => {
+        captionButton.style.backgroundColor = "";
+    }, 200);
+});
+
 var front = false;
 
 changeCameraButton.addEventListener("click", () => {
