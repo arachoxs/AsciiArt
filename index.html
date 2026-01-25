@@ -4,7 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ascii Style</title>
+    <!-- SEO & Meta Tags -->
+    <title>ASCII Camera - Realtime ASCII Art Generator</title>
+    <meta name="description" content="Generate ASCII art from your camera or images in real-time. Free online ASCII Art Generator for creating retro text-based visuals, glitch art, and matrix effects.">
+    <meta name="keywords" content="ascii art generator, ascii camera, video to ascii, image to text, text art maker, glitch art filter, retro camera effect, html5 ascii">
+    <meta name="author" content="Arachoxs">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ASCII Camera - Realtime ASCII Art Generator">
+    <meta property="og:description" content="Convert video and images to ASCII art instantly. Free browser-based retro visual effect tool.">
+    <meta property="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 3h14v2H5V3zm0 16H3V5h2v14zm14 0v2H5v-2h14zm0 0h2V5h-2v14zM10 8H8v2h2V8zm4 0h2v2h-2V8zm-5 6v-2H7v2h2zm6 0v2H9v-2h6zm0 0h2v-2h-2v2z' fill='%2315803d'/%3E%3C/svg%3E">
     <link href="./output.css" rel="stylesheet">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +33,6 @@
     <main class="flex bg-green-950/30 min-h-screen md:flex-row flex-col-reverse m-0 w-full">
         <div
             class="relative bg-green-800/30 box-border overflow-scroll md:w-8/10 min-h-screen max-h-screen md:min-h-auto md:mx-3 my-3 p-2 max-w-full">
-            <!--quitar pading x fue para pruebas-->
             <p id="ascii-container" class="mx-auto text-center font-mono"></p>
             <div class="text-green-600 absolute bottom-7 left-0 right-0 mb-2 flex items-center justify-center gap-4"
                 id="camera-options" style="display: none;">
@@ -46,11 +58,31 @@
             text-[10px]
             tracking-[0.5px]
         ">
-            <header class="bg-green-950/30 flex flex-col py-1 w-full h-fit">
-                <h1 class="text-3xl text-center w-full">ASCII Camera</h1>
-                <p class="w-full text-xl text-center">Arachoxs</p>
-            </header>
+            <header class="bg-green-950/30 flex flex-col pb-2 py-1 w-full h-fit">
+                <h1 class="text-3xl text-center w-full tracking-widest relative">
+                    ASCII Camera
+                    <span class="text-[10px] absolute top-1 ml-1 opacity-60 tracking-normal border border-green-700/50 px-1 rounded">v1.0</span>
+                </h1>
+                <div class="flex w-full justify-center items-center gap-2">
+                    <p class="w-fit text-xl text-center">Arachoxs</p>
+                        <a href="https://www.instagram.com/arachoxs/" target="_blank">
+                            <div class="w-6 h-6 mx-auto mt-1 mb-1 hover:opacity-70 cursor-pointer bg-current" style="-webkit-mask-image: url(./src/instagram.png); mask-image: url(./src/instagram.png); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center;"></div>
+                        </a>
 
+                        <a href="https://github.com/arachoxs/AsciiArt" target="_blank">
+                            <div class="w-6 h-6 mx-auto mt-1 mb-1 hover:opacity-70 cursor-pointer bg-current" style="-webkit-mask-image: url(./src/github.png); mask-image: url(./src/github.png); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center;"></div>
+                        </a>
+                </div>
+
+                <div class="flex flex-col mt-2 px-4 gap-1">
+                    <p class="text-[11px] text-center text-green-700/60 leading-3">
+                        System unstable. Bugs may occur during operation. 
+                        <br/>
+                        Report critical failures via <a href="mailto:j.agudelo9@utp.edu.co" target="_blank" class="underline hover:text-green-500">Mail</a> frequency.
+                    </p>
+                </div>
+
+            </header>
             <section class="flex flex-col mt-3 w-full flex-1">
                 <div class="flex justify-around w-full flex-wrap mt-0 px-2 gap-4">
                     <button id="camera-input"
