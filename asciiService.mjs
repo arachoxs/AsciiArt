@@ -4,14 +4,28 @@ const canvas = document.getElementById("canvas-container");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
 let charSetIndex = 1;
+
 export const chars = [
-    "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/()1{}[]?-_+~<>i!lI;:,`'.",
-    "@#W$9876543210?!abc;:+=-,._",
-    "1234567890!@#$%^&*()`~_+-=",
-    "asdfghjklASDFGHJKL;':",
-    "zxcvbnmZXCVBNM,./<>?",
-    "qwertyuiopQWERTYUIOP[]{}",
-    "@%#*+=-:."
+  // Ultra detallado (máxima precisión de brillo)
+    "$@MBHENR#KWXDFPQAg8S9OUZ0CJLIVYxzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,`'. ",
+
+  // Detallado clásico (muy buen balance)
+    "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/()1{}[]?-_+~<>i!lI;:,`'. ",
+
+    // Intermedio (buena definición sin ruido)
+    "@#W$9876543210?!abc;:+=-,._ ",
+
+    // Balanceado / estándar (el más usado)
+    "@%#*+=-:. ",
+
+    // Minimalista (rápido y limpio)
+    "#*+=-. ",
+
+    // Numérico (estilo glitch)
+    "9876543210 ",
+
+    // Experimental / caos controlado
+    "@#$%&*+=-~<>!?;:/\\|[]{}() "
 ];
 
 const LUMINANCE_WEIGHTS = { R: 0.2126, G: 0.7152, B: 0.0722 };
@@ -203,17 +217,19 @@ async function asciiCanva(element, width, height, mirror = false) { //to-do: sep
     const data = ctx.getImageData(0, 0, width, height).data;
 
     //se crea el elemento canva donde se pondra el arte asci
-    const asciiCanva = new OffscreenCanvas(width, height);
+    // Usamos un multiplicador de escala para mejorar la resolución del texto
+    const exportScale = 3;
+    const asciiCanva = new OffscreenCanvas(width * exportScale, height * exportScale);
 
     const asciiCtx = asciiCanva.getContext("2d");
 
     //se pinta el canvas de blanco o el color seleccionado
     asciiCtx.fillStyle = colors.background;
-    asciiCtx.fillRect(0, 0, width, height);
+    asciiCtx.fillRect(0, 0, width * exportScale, height * exportScale);
     asciiCtx.fillStyle = colors.font;
     asciiCtx.textBaseline = "top";
 
-    asciiCtx.font = `${config.fontSize}px monospace`
+    asciiCtx.font = `${config.fontSize * exportScale}px monospace`
 
     const charSet = chars[charSetIndex];
 
@@ -240,7 +256,7 @@ async function asciiCanva(element, width, height, mirror = false) { //to-do: sep
                 asciiCtx.fillStyle = `rgb(${r},${g},${b})`;
             }
 
-            asciiCtx.fillText(charSet[[index]], x * characterSize.width, y * characterSize.height);
+            asciiCtx.fillText(charSet[index], x * characterSize.width * exportScale, y * characterSize.height * exportScale);
         }
     }
 
@@ -319,6 +335,14 @@ function asciiFrame(element, width, height, mirror = false) {
             const b = data[pixelIndex + 2];
             const lum = LUMINANCE_WEIGHTS.R * r + LUMINANCE_WEIGHTS.G * g + LUMINANCE_WEIGHTS.B * b;
             const index = Math.floor(lum / 255 * (charSet.length - 1));
+            let char = charSet[index];
+
+            // Escapamos los caracteres que rompen el HTML
+            if (char === " ") char = "&nbsp;";
+            else if (char === "<") char = "&lt;";
+            else if (char === ">") char = "&gt;";
+            else if (char === "&") char = "&amp;";
+            
 
             if (useColors) {
                 const hex =
@@ -328,9 +352,9 @@ function asciiFrame(element, width, height, mirror = false) {
                     b.toString(16).padStart(2, "0");
 
 
-                ascii += `<span style="color:${hex}">${charSet[index]}</span>`;
+                ascii += `<span style="color:${hex}">${char}</span>`;
             } else {
-                ascii += charSet[index];
+                ascii += char;
             }
         }
 

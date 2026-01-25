@@ -6,7 +6,7 @@ const imageInput = document.getElementById("image-input");
 
 // Populate charset select
 
-export function updateCharSetSelect(chars, charsIndexSelected = 1) {
+export function updateCharSetSelect(chars, charsIndexSelected = 0) {
     const charSetInput = document.getElementById("charset-input");
     charSetInput.innerHTML = "";
     chars.forEach((charSet, index) => {
