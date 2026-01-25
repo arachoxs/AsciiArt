@@ -255,9 +255,6 @@
   .hidden {
     display: none;
   }
-  .table {
-    display: table;
-  }
   .h-6 {
     height: calc(var(--spacing) * 6);
   }
@@ -309,14 +306,8 @@
   .flex-2 {
     flex: 2;
   }
-  .border-collapse {
-    border-collapse: collapse;
-  }
   .cursor-pointer {
     cursor: pointer;
-  }
-  .resize {
-    resize: both;
   }
   .flex-col {
     flex-direction: column;
@@ -369,9 +360,6 @@
     border-style: var(--tw-border-style);
     border-width: 4px;
   }
-  .border-green-700 {
-    border-color: var(--color-green-700);
-  }
   .border-green-700\/30 {
     border-color: color-mix(in srgb, oklch(52.7% 0.154 150.069) 30%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
@@ -384,17 +372,11 @@
       border-color: color-mix(in oklab, var(--color-green-700) 50%, transparent);
     }
   }
-  .border-green-800 {
-    border-color: var(--color-green-800);
-  }
   .border-green-800\/50 {
     border-color: color-mix(in srgb, oklch(44.8% 0.119 151.328) 50%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       border-color: color-mix(in oklab, var(--color-green-800) 50%, transparent);
     }
-  }
-  .border-t-green-900 {
-    border-top-color: var(--color-green-900);
   }
   .border-t-green-900\/60 {
     border-top-color: color-mix(in srgb, oklch(39.3% 0.095 152.535) 60%, transparent);
@@ -402,17 +384,11 @@
       border-top-color: color-mix(in oklab, var(--color-green-900) 60%, transparent);
     }
   }
-  .border-t-green-950 {
-    border-top-color: var(--color-green-950);
-  }
   .border-t-green-950\/30 {
     border-top-color: color-mix(in srgb, oklch(26.6% 0.065 152.934) 30%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       border-top-color: color-mix(in oklab, var(--color-green-950) 30%, transparent);
     }
-  }
-  .border-r-green-600 {
-    border-right-color: var(--color-green-600);
   }
   .border-r-green-600\/60 {
     border-right-color: color-mix(in srgb, oklch(62.7% 0.194 149.214) 60%, transparent);
@@ -420,17 +396,11 @@
       border-right-color: color-mix(in oklab, var(--color-green-600) 60%, transparent);
     }
   }
-  .border-r-green-800 {
-    border-right-color: var(--color-green-800);
-  }
   .border-r-green-800\/30 {
     border-right-color: color-mix(in srgb, oklch(44.8% 0.119 151.328) 30%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       border-right-color: color-mix(in oklab, var(--color-green-800) 30%, transparent);
     }
-  }
-  .border-b-green-600 {
-    border-bottom-color: var(--color-green-600);
   }
   .border-b-green-600\/60 {
     border-bottom-color: color-mix(in srgb, oklch(62.7% 0.194 149.214) 60%, transparent);
@@ -438,26 +408,17 @@
       border-bottom-color: color-mix(in oklab, var(--color-green-600) 60%, transparent);
     }
   }
-  .border-b-green-800 {
-    border-bottom-color: var(--color-green-800);
-  }
   .border-b-green-800\/30 {
     border-bottom-color: color-mix(in srgb, oklch(44.8% 0.119 151.328) 30%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       border-bottom-color: color-mix(in oklab, var(--color-green-800) 30%, transparent);
     }
   }
-  .border-l-green-900 {
-    border-left-color: var(--color-green-900);
-  }
   .border-l-green-900\/60 {
     border-left-color: color-mix(in srgb, oklch(39.3% 0.095 152.535) 60%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       border-left-color: color-mix(in oklab, var(--color-green-900) 60%, transparent);
     }
-  }
-  .border-l-green-950 {
-    border-left-color: var(--color-green-950);
   }
   .border-l-green-950\/30 {
     border-left-color: color-mix(in srgb, oklch(26.6% 0.065 152.934) 30%, transparent);
@@ -471,17 +432,11 @@
   .bg-current {
     background-color: currentcolor;
   }
-  .bg-green-800 {
-    background-color: var(--color-green-800);
-  }
   .bg-green-800\/30 {
     background-color: color-mix(in srgb, oklch(44.8% 0.119 151.328) 30%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, var(--color-green-800) 30%, transparent);
     }
-  }
-  .bg-green-950 {
-    background-color: var(--color-green-950);
   }
   .bg-green-950\/10 {
     background-color: color-mix(in srgb, oklch(26.6% 0.065 152.934) 10%, transparent);
@@ -540,17 +495,11 @@
     font-size: var(--text-xl);
     line-height: var(--tw-leading, var(--text-xl--line-height));
   }
-  .text-\[9px\] {
-    font-size: 9px;
-  }
   .text-\[10px\] {
     font-size: 10px;
   }
   .text-\[11px\] {
     font-size: 11px;
-  }
-  .text-\[12px\] {
-    font-size: 12px;
   }
   .leading-3 {
     --tw-leading: calc(var(--spacing) * 3);
@@ -588,27 +537,14 @@
       color: color-mix(in oklab, var(--color-green-700) 60%, transparent);
     }
   }
-  .text-green-700\/80 {
-    color: color-mix(in srgb, oklch(52.7% 0.154 150.069) 80%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      color: color-mix(in oklab, var(--color-green-700) 80%, transparent);
-    }
-  }
   .text-white {
     color: var(--color-white);
-  }
-  .uppercase {
-    text-transform: uppercase;
   }
   .underline {
     text-decoration-line: underline;
   }
   .opacity-60 {
     opacity: 60%;
-  }
-  .outline {
-    outline-style: var(--tw-outline-style);
-    outline-width: 1px;
   }
   .peer-checked\:block {
     &:is(:where(.peer):checked ~ *) {
@@ -647,6 +583,16 @@
   .md\:mr-5 {
     @media (width >= 48rem) {
       margin-right: calc(var(--spacing) * 5);
+    }
+  }
+  .md\:ml-1 {
+    @media (width >= 48rem) {
+      margin-left: calc(var(--spacing) * 1);
+    }
+  }
+  .md\:ml-2 {
+    @media (width >= 48rem) {
+      margin-left: calc(var(--spacing) * 2);
     }
   }
   .md\:min-h-auto {
@@ -693,18 +639,12 @@ main * {
   syntax: "*";
   inherits: false;
 }
-@property --tw-outline-style {
-  syntax: "*";
-  inherits: false;
-  initial-value: solid;
-}
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
       --tw-border-style: solid;
       --tw-leading: initial;
       --tw-tracking: initial;
-      --tw-outline-style: solid;
     }
   }
 }
