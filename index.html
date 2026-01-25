@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,20 +11,34 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
+
 <body class="bg-black text-white">
     <video id="video-container" style="display:none;" autoplay></video>
-    <img id="img-container" class="hidden"/>
+    <img id="img-container" class="hidden" />
     <canvas id="canvas-container" class="hidden"></canvas>
 
     <main class="flex bg-green-950/30 min-h-screen md:flex-row flex-col-reverse m-0 w-full">
-        <div class="relative bg-green-800/30 box-border overflow-scroll md:w-8/10 min-h-screen max-h-screen md:min-h-auto md:mx-3 my-3 p-2 max-w-full"> <!--quitar pading x fue para pruebas-->
+        <div
+            class="relative bg-green-800/30 box-border overflow-scroll md:w-8/10 min-h-screen max-h-screen md:min-h-auto md:mx-3 my-3 p-2 max-w-full">
+            <!--quitar pading x fue para pruebas-->
             <p id="ascii-container" class="mx-auto text-center font-mono"></p>
-            <div class="text-green-600 absolute bottom-7 left-0 right-0 mb-2 flex items-center justify-center gap-4" id="camera-options" style="display: none;">
-                <button id="caption-button" class="border-4 cursor-pointer bg-green-950/90 border-t-green-900/60 border-r-green-600/60 border-b-green-600/60 border-l-green-900/60 p-2">
-                    <svg fill="none" class="w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M7 3h10v2h5v16H2V7h2v12h16V7h-5V5H9v2H2V5h5V3zm7 12h-4v2h4v-2zm-4-2v2H8v-2h2zm0-2V9H8v2h2zm6 2v2h-2v-2h2zm0-2V9h-2v2h2z" fill="currentColor"/> </svg>
+            <div class="text-green-600 absolute bottom-7 left-0 right-0 mb-2 flex items-center justify-center gap-4"
+                id="camera-options" style="display: none;">
+                <button id="caption-button"
+                    class="border-4 cursor-pointer bg-green-950/90 border-t-green-900/60 border-r-green-600/60 border-b-green-600/60 border-l-green-900/60 p-2">
+                    <svg fill="none" class="w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M7 3h10v2h5v16H2V7h2v12h16V7h-5V5H9v2H2V5h5V3zm7 12h-4v2h4v-2zm-4-2v2H8v-2h2zm0-2V9H8v2h2zm6 2v2h-2v-2h2zm0-2V9h-2v2h2z"
+                            fill="currentColor" />
+                    </svg>
                 </button>
-                <button id="change-camera-button" class="border-4 h-fit cursor-pointer bg-green-950/90 border-t-green-900/60 border-r-green-600/60 border-b-green-600/60 border-l-green-900/60 p-2">
-                    <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M3 5V3h2v2H3zm4 2H5V5h2v2zm2 2H7V7h2v2zm2 2H9V9h2v2zm2 0h-2v2h2v2h2v2h2v2h-2v2h6v-6h-2v2h-2v-2h-2v-2h-2v-2zm2-2v2h-2V9h2zm2-2v2h-2V7h2zm0-2v2h2v2h2V3h-6v2h2zM5 19v-2h2v2H5zm0 0v2H3v-2h2zm2-2v-2h2v2H7z" fill="currentColor"/> </svg>
+                <button id="change-camera-button"
+                    class="border-4 h-fit cursor-pointer bg-green-950/90 border-t-green-900/60 border-r-green-600/60 border-b-green-600/60 border-l-green-900/60 p-2">
+                    <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M3 5V3h2v2H3zm4 2H5V5h2v2zm2 2H7V7h2v2zm2 2H9V9h2v2zm2 0h-2v2h2v2h2v2h2v2h-2v2h6v-6h-2v2h-2v-2h-2v-2h-2v-2zm2-2v2h-2V9h2zm2-2v2h-2V7h2zm0-2v2h2v2h2V3h-6v2h2zM5 19v-2h2v2H5zm0 0v2H3v-2h2zm2-2v-2h2v2H7z"
+                            fill="currentColor" />
+                    </svg>
                 </button>
             </div>
         </div>
@@ -38,75 +53,134 @@
 
             <section class="flex flex-col mt-3 w-full flex-1">
                 <div class="flex justify-around w-full flex-wrap mt-0 px-2 gap-4">
-                    <button id="camera-input" class="flex-1 flex flex-col gap-1 h-20 justify-center items-center border-4 cursor-pointer border-t-green-950/30 border-r-green-800/30 border-b-green-800/30 border-l-green-950/30">
-                        <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M9 3H7v2H2v16h20V5h-5V3H9zm8 4h3v12H4V7h5V5h6v2h2zm-7 2h4v2h-4V9zm4 6h-4v2h4v-2h2v-4h-2v4zm-6-4h2v4H8v-4z" fill="currentColor"/> </svg>
+                    <button id="camera-input"
+                        class="flex-1 flex flex-col gap-1 h-20 justify-center items-center border-4 cursor-pointer border-t-green-950/30 border-r-green-800/30 border-b-green-800/30 border-l-green-950/30">
+                        <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path
+                                d="M9 3H7v2H2v16h20V5h-5V3H9zm8 4h3v12H4V7h5V5h6v2h2zm-7 2h4v2h-4V9zm4 6h-4v2h4v-2h2v-4h-2v4zm-6-4h2v4H8v-4z"
+                                fill="currentColor" />
+                        </svg>
                         <p class="text-lg leading-4">Use Camera</p>
                     </button>
 
-                    <label class="flex-1 h-20 flex flex-col gap-1 justify-center items-center border-4 cursor-pointer border-t-green-950/30 border-r-green-800/30 border-b-green-800/30 border-l-green-950/30">
-                        <input type="file" accept="image/*" id="image-input" class="hidden"/>
+                    <label
+                        class="flex-1 h-20 flex flex-col gap-1 justify-center items-center border-4 cursor-pointer border-t-green-950/30 border-r-green-800/30 border-b-green-800/30 border-l-green-950/30">
+                        <input type="file" accept="image/*" id="image-input" class="hidden" />
                         <div class="flex flex-col gap-1 justify-center items-center">
-                            <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M4 3H2v18h20V3H4zm16 2v14H4V5h16zm-6 4h-2v2h-2v2H8v2H6v2h2v-2h2v-2h2v-2h2v2h2v2h2v-2h-2v-2h-2V9zM8 7H6v2h2V7z" fill="currentColor"/> </svg>                      
+                            <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path
+                                    d="M4 3H2v18h20V3H4zm16 2v14H4V5h16zm-6 4h-2v2h-2v2H8v2H6v2h2v-2h2v-2h2v-2h2v2h2v2h2v-2h-2v-2h-2V9zM8 7H6v2h2V7z"
+                                    fill="currentColor" />
+                            </svg>
                             <p class="text-lg leading-4">Use Image</p>
                         </div>
-                        
+
                     </label>
                 </div>
 
                 <form class="flex flex-col text-xl gap-2 px-2 leading-5" id="style-form">
-                    <hr class="border-green-700/30 mt-4 my-2"/>
+                    <hr class="border-green-700/30 mt-4 my-2" />
+
+                    <div class="flex gap-1 items-center justify-center">
+                        <label class="w-24 flex items-center">Char Set></label>
+                        <select class="h-8 bg-green-950/30 text-green-700 border-2 border-green-800/50" name="charSet"
+                            id="charset-input">
+                            <!-- Options generated by JS -->
+                        </select>
+                    </div>
+
+                    <label class="flex justify-start gap-3 w-fit items-center">
+                        <input type="checkbox" class="hidden peer" name="dynamicColors" id="revert-charset-input" />
+                        <svg fill="none" class="w-5 block peer-checked:hidden" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24">
+                            <path d="M3 3h18v18H3V3zm16 16V5H5v14h14z" fill="currentColor" />
+                        </svg>
+                        <svg fill="none" class="w-5 hidden peer-checked:block" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M5 3H3v18h18V3H5zm0 2h14v14H5V5zm4 7H7v2h2v2h2v-2h2v-2h2v-2h2V8h-2v2h-2v2h-2v2H9v-2z"
+                                fill="currentColor" />
+                        </svg>
+                        <p>Revert charSet</p>
+                    </label>
+
+                    <hr class="border-green-700/30 my-2" />
 
                     <div class="flex gap-2">
                         <label>Font\Size></label>
-                        <input class="w-full" name="fontSize" type="number" id="font-size-input" class="w-full" placeholder="px"/>
+                        <input class="w-full" name="fontSize" type="number" id="font-size-input" class="w-full"
+                            placeholder="px" />
                     </div>
                     <div class="flex gap-2">
                         <label>Font\letterSpacing></label>
-                        <input class="w-full " name="letterSpacing" type="number" id="letter-spacing-input" class="w-full" placeholder="px"/>
+                        <input class="w-full " name="letterSpacing" type="number" id="letter-spacing-input"
+                            class="w-full" placeholder="px" />
                     </div>
                     <div class="flex gap-2">
                         <label>Font\lineHeight></label>
-                        <input class="w-full " name="lineHeight" min="1" type="number" id="line-height-input" class="w-full" placeholder="px"/>
+                        <input class="w-full " name="lineHeight" min="1" type="number" id="line-height-input"
+                            class="w-full" placeholder="px" />
                     </div>
 
-                    <hr class="border-green-700/30 my-2"/>
+                    <hr class="border-green-700/30 my-2" />
 
                     <label class="flex justify-start gap-3 w-fit items-center">
-                        <input type="checkbox"  class="hidden peer" name="dynamicColors" id="dynamic-colors-input"/>
-                        <svg fill="none" class="w-5 block peer-checked:hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M3 3h18v18H3V3zm16 16V5H5v14h14z" fill="currentColor"/> </svg>
-                        <svg fill="none" class="w-5 hidden peer-checked:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M5 3H3v18h18V3H5zm0 2h14v14H5V5zm4 7H7v2h2v2h2v-2h2v-2h2v-2h2V8h-2v2h-2v2h-2v2H9v-2z" fill="currentColor"/> </svg>
+                        <input type="checkbox" class="hidden peer" name="dynamicColors" id="dynamic-colors-input" />
+                        <svg fill="none" class="w-5 block peer-checked:hidden" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24">
+                            <path d="M3 3h18v18H3V3zm16 16V5H5v14h14z" fill="currentColor" />
+                        </svg>
+                        <svg fill="none" class="w-5 hidden peer-checked:block" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M5 3H3v18h18V3H5zm0 2h14v14H5V5zm4 7H7v2h2v2h2v-2h2v-2h2v-2h2V8h-2v2h-2v2h-2v2H9v-2z"
+                                fill="currentColor" />
+                        </svg>
                         <p>Dynamic colors (less fps)</p>
                     </label>
 
                     <div>
                         <label class="flex gap-1 items-center ">
                             <span class="flex-2">Background Color></span>
-                            <input class="w-full h-8 mt-1 flex-1" id="background-color-input" type="color" name="backgroundColor" id="background-color-input" value="#000000"/>
+                            <input class="w-full h-8 mt-1 flex-1" id="background-color-input" type="color"
+                                name="backgroundColor" id="background-color-input" value="#000000" />
                         </label>
 
                         <label class="flex gap-1 items-center" id="chars-color-container">
                             <span class="flex-2">Characters Color></span>
-                            <input class="w-full h-8 mt-1 flex-1" id="chars-color-input" type="color" name="charsColor" value="#000000"/>
+                            <input class="w-full h-8 mt-1 flex-1" id="chars-color-input" type="color" name="charsColor"
+                                value="#000000" />
                         </label>
                     </div>
-                    
-                    <hr class="border-green-700/30 my-2"/>
 
-                    <button type="submit" class="flex h-12 gap-2 justify-center items-center border-4 cursor-pointer border-t-green-950/30 border-r-green-800/30 border-b-green-800/30 border-l-green-950/30">
-                        <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M18 2h-2v2h-2v2h-2v2h-2v2H8v2H6v2H4v2H2v6h6v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2V8h2V6h-2V4h-2V2zm0 8h-2v2h-2v2h-2v2h-2v2H8v-2H6v-2h2v-2h2v-2h2V8h2V6h2v2h2v2zM6 16H4v4h4v-2H6v-2z" fill="currentColor"/> </svg>
+                    <hr class="border-green-700/30 my-2" />
+
+                    <button type="submit"
+                        class="flex h-12 gap-2 justify-center items-center border-4 cursor-pointer border-t-green-950/30 border-r-green-800/30 border-b-green-800/30 border-l-green-950/30">
+                        <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path
+                                d="M18 2h-2v2h-2v2h-2v2h-2v2H8v2H6v2H4v2H2v6h6v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2V8h2V6h-2V4h-2V2zm0 8h-2v2h-2v2h-2v2h-2v2H8v-2H6v-2h2v-2h2v-2h2V8h2V6h2v2h2v2zM6 16H4v4h4v-2H6v-2z"
+                                fill="currentColor" />
+                        </svg>
                         <p class="text-lg">Apply Style</p>
                     </button>
                 </form>
 
-                <button type="button" id="download-button" class="flex mt-2 mx-2 h-12 gap-2 justify-center items-center border-4 cursor-pointer border-t-green-950/30 border-r-green-800/30 border-b-green-800/30 border-l-green-950/30">
-                    <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M13 17V3h-2v10H9v-2H7v2h2v2h2v2h2zm8 2v-4h-2v4H5v-4H3v6h18v-2zm-8-6v2h2v-2h2v-2h-2v2h-2z" fill="currentColor"/> </svg>
+                <button type="button" id="download-button"
+                    class="flex mt-2 mx-2 h-12 gap-2 justify-center items-center border-4 cursor-pointer border-t-green-950/30 border-r-green-800/30 border-b-green-800/30 border-l-green-950/30">
+                    <svg fill="none" class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M13 17V3h-2v10H9v-2H7v2h2v2h2v2h2zm8 2v-4h-2v4H5v-4H3v6h18v-2zm-8-6v2h2v-2h2v-2h-2v2h-2z"
+                            fill="currentColor" />
+                    </svg>
                     <p class="text-lg">Download</p>
                 </button>
             </section>
-            
+
         </div>
     </main>
 
     <script type="module" src="./script.js"></script>
 </body>
+
 </html>
